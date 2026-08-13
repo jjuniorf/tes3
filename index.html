@@ -36,6 +36,8 @@
             padding-bottom: calc(70px + var(--safe-bottom));
             line-height: 1.5;
             -webkit-tap-highlight-color: transparent;
+            -webkit-overflow-scrolling: touch;
+            overflow-x: hidden;
         }
 
         ::-webkit-scrollbar {
@@ -53,6 +55,7 @@
             max-width: 600px;
             margin: 0 auto;
             padding: 0 16px;
+            -webkit-overflow-scrolling: touch;
         }
 
         /* ── Tabs Container ── */
@@ -89,6 +92,7 @@
             background-size: cover;
             background-position: center center;
             box-shadow: var(--shadow);
+            -webkit-overflow-scrolling: touch;
         }
         .hero::after {
             content: '';
@@ -206,6 +210,8 @@
             flex-direction: column;
             gap: 14px;
             margin-bottom: 24px;
+            padding-top: 8px;
+            -webkit-overflow-scrolling: touch;
         }
 
         /* ── Card (horizontal) ── */
@@ -219,6 +225,7 @@
             border: 1px solid rgba(255, 255, 255, 0.04);
             min-height: 100px;
             position: relative;
+            -webkit-overflow-scrolling: touch;
         }
         .card:active {
             transform: scale(0.98);
@@ -332,6 +339,7 @@
             border: 1px solid rgba(255, 255, 255, 0.08);
             margin: 16px 0;
             position: relative;
+            -webkit-overflow-scrolling: touch;
         }
         .search-tab .search-wrap input {
             background: none;
@@ -371,6 +379,7 @@
             display: none;
             z-index: 20;
             box-shadow: var(--shadow);
+            -webkit-overflow-scrolling: touch;
         }
         .suggestions-dropdown.show {
             display: block;
@@ -503,6 +512,7 @@
             border-radius: 0;
             animation: slideUp 0.35s ease;
             position: relative;
+            -webkit-overflow-scrolling: touch;
         }
         @keyframes slideUp {
             from {
@@ -693,6 +703,7 @@
             max-height: 260px;
             overflow-y: auto;
             padding-right: 4px;
+            -webkit-overflow-scrolling: touch;
         }
         .episode-item {
             padding: 10px 12px;
@@ -1014,22 +1025,14 @@
             <div class="horizontal-scroll" id="appleContainer"></div>
         </section>
 
-        <!-- MOVIES TAB -->
+        <!-- MOVIES TAB (header removed) -->
         <section id="moviesTab" class="tab-content">
-            <div class="section-header">
-                <h2>🎬 Movies</h2>
-                <span class="count" id="moviesTabCount">0</span>
-            </div>
             <div id="moviesGrid" class="grid"></div>
             <div class="sentinel" id="moviesSentinel"></div>
         </section>
 
-        <!-- TV SHOWS TAB -->
+        <!-- TV SHOWS TAB (header removed) -->
         <section id="tvTab" class="tab-content">
-            <div class="section-header">
-                <h2>📺 TV Shows</h2>
-                <span class="count" id="tvTabCount">0</span>
-            </div>
             <div id="tvGrid" class="grid"></div>
             <div class="sentinel" id="tvSentinel"></div>
         </section>
@@ -1132,8 +1135,8 @@
         const API_KEY = '77c1a81838fea47869506ff798f95404'; // <-- PASTE YOUR API KEY HERE
 
         // ─── EMBED URLS (replace with your free website) ───
-        const MOVIE_EMBED_URL = 'https://viduki.net/3/movie/{id}?color=6441a5';
-        const TV_EMBED_URL = 'https://viduki.net/3/tv/{id}/{season}/{episode}?color=6441a5';
+        const MOVIE_EMBED_URL = 'https://zxcstream.xyz/player/movie/{id}';
+        const TV_EMBED_URL = 'https://www.vidking.net/embed/tv/{id}/{season}/{episode}?color=9146ff';
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
         const TMDB_BASE = 'https://api.themoviedb.org/3';
@@ -1195,11 +1198,9 @@
         const tvCount = $('tvCount');
 
         const moviesGrid = $('moviesGrid');
-        const moviesTabCount = $('moviesTabCount');
         const moviesSentinel = $('moviesSentinel');
 
         const tvGrid = $('tvGrid');
-        const tvTabCount = $('tvTabCount');
         const tvSentinel = $('tvSentinel');
 
         const searchInput = $('searchInput');
@@ -1605,7 +1606,6 @@
                     moviesItems = [...moviesItems, ...results];
                     renderCards(moviesGrid, moviesItems, 'movie');
                 }
-                moviesTabCount.textContent = moviesItems.length;
                 moviesPage = page;
 
                 if (page >= moviesTotalPages) {
@@ -1644,7 +1644,6 @@
                     tvItems = [...tvItems, ...results];
                     renderCards(tvGrid, tvItems, 'tv');
                 }
-                tvTabCount.textContent = tvItems.length;
                 tvPage = page;
 
                 if (page >= tvTotalPages) {
@@ -1784,7 +1783,6 @@
                     fetchTMDB('/search/movie', { query: q, page }),
                     fetchTMDB('/search/tv', { query: q, page })
                 ]);
-                // Explicitly tag each result with its type
                 const movies = (movieData.results || []).map(m => ({ ...m, _type: 'movie' }));
                 const tvs = (tvData.results || []).map(t => ({ ...t, _type: 'tv' }));
                 const combined = [...movies, ...tvs];
