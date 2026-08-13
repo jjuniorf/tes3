@@ -1,0 +1,1664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
+    <title>CineVerse – Mobile</title>
+    <style>
+        /* ── Reset & Base ── */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0a0e17;
+            --bg-secondary: #111927;
+            --bg-card: #1a2332;
+            --bg-card-hover: #253141;
+            --text-primary: #f0f4ff;
+            --text-secondary: #a0b4cc;
+            --accent: #e50914;
+            --accent-hover: #f6121d;
+            --gradient: linear-gradient(135deg, #e50914, #b20710);
+            --radius: 12px;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            --transition: 0.25s ease;
+            --safe-bottom: env(safe-area-inset-bottom, 0px);
+        }
+
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding-bottom: calc(70px + var(--safe-bottom));
+            line-height: 1.5;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 4px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 0 16px;
+        }
+
+        /* ── Header ── */
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: rgba(10, 14, 23, 0.92);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 12px 0;
+        }
+        .header .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .logo {
+            font-size: 22px;
+            font-weight: 800;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.3px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .logo-icon {
+            font-size: 26px;
+            -webkit-text-fill-color: initial;
+            color: var(--accent);
+        }
+
+        /* ── Tabs Container ── */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ── Home: Hero ── */
+        .hero {
+            position: relative;
+            border-radius: var(--radius);
+            overflow: hidden;
+            margin: 16px 0 20px;
+            min-height: 220px;
+            background: var(--bg-secondary);
+            display: flex;
+            align-items: flex-end;
+            padding: 20px 20px 24px;
+            background-size: cover;
+            background-position: center center;
+            box-shadow: var(--shadow);
+        }
+        .hero::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(0deg, rgba(10, 14, 23, 0.95) 10%, rgba(10, 14, 23, 0.3) 70%, transparent 100%);
+            pointer-events: none;
+        }
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+        }
+        .hero-content .badge {
+            display: inline-block;
+            background: var(--accent);
+            color: #fff;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 2px 12px;
+            border-radius: 20px;
+            margin-bottom: 6px;
+        }
+        .hero-content h1 {
+            font-size: 22px;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 4px;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+        }
+        .hero-content .meta {
+            display: flex;
+            gap: 14px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+            flex-wrap: wrap;
+        }
+        .hero-content .meta span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .hero-content .overview {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+        .hero-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 18px;
+            border: none;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            background: var(--bg-card);
+            color: var(--text-primary);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        .btn-primary {
+            background: var(--gradient);
+            color: #fff;
+            border: none;
+            box-shadow: 0 4px 16px rgba(229, 9, 20, 0.3);
+        }
+        .btn-primary:hover {
+            transform: scale(1.03);
+        }
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        /* ── Section Header ── */
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 16px 0 12px;
+        }
+        .section-header h2 {
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+        }
+        .section-header .count {
+            font-size: 12px;
+            color: var(--text-secondary);
+            background: var(--bg-secondary);
+            padding: 2px 14px;
+            border-radius: 20px;
+        }
+
+        /* ── Grid (vertical list) ── */
+        .grid {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-bottom: 24px;
+        }
+
+        /* ── Card (horizontal) ── */
+        .card {
+            display: flex;
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            overflow: hidden;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            min-height: 100px;
+            position: relative;
+        }
+        .card:active {
+            transform: scale(0.98);
+            background: var(--bg-card-hover);
+        }
+        .card-poster {
+            flex: 0 0 100px;
+            position: relative;
+            background: var(--bg-secondary);
+            overflow: hidden;
+        }
+        .card-poster img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .card-poster .rating {
+            position: absolute;
+            bottom: 4px;
+            right: 4px;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(4px);
+            padding: 1px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+            color: #fcd34d;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        .card-poster .type-badge {
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(4px);
+            padding: 1px 8px;
+            border-radius: 12px;
+            font-size: 9px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            color: var(--text-secondary);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        .card-body {
+            flex: 1;
+            padding: 12px 14px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-width: 0;
+        }
+        .card-body h3 {
+            font-size: 15px;
+            font-weight: 600;
+            line-height: 1.3;
+            margin-bottom: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .card-body .card-meta {
+            font-size: 12px;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .card-body .card-meta .dot {
+            width: 3px;
+            height: 3px;
+            border-radius: 50%;
+            background: var(--text-secondary);
+            opacity: 0.4;
+        }
+        .card-fav-btn {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            border: none;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            font-size: 18px;
+            color: #fff;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 5;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .card-fav-btn.active {
+            color: var(--accent);
+        }
+        .card-fav-btn:active {
+            transform: scale(0.9);
+        }
+
+        /* ── Search Tab ── */
+        .search-tab .search-wrap {
+            display: flex;
+            align-items: center;
+            background: var(--bg-secondary);
+            border-radius: 30px;
+            padding: 4px 4px 4px 18px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            margin: 16px 0;
+        }
+        .search-tab .search-wrap input {
+            background: none;
+            border: none;
+            outline: none;
+            color: var(--text-primary);
+            font-size: 15px;
+            padding: 10px 0;
+            width: 100%;
+        }
+        .search-tab .search-wrap input::placeholder {
+            color: var(--text-secondary);
+        }
+        .search-tab .search-wrap button {
+            background: var(--gradient);
+            border: none;
+            border-radius: 30px;
+            padding: 8px 18px;
+            color: #fff;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        /* ── Favorites Tab ── */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-secondary);
+        }
+        .empty-state .big-icon {
+            font-size: 48px;
+            display: block;
+            margin-bottom: 12px;
+        }
+        .empty-state h3 {
+            font-size: 18px;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        /* ── Load More ── */
+        .load-more-wrap {
+            text-align: center;
+            margin: 4px 0 20px;
+        }
+        .load-more-wrap .btn {
+            background: var(--bg-card);
+            color: var(--text-primary);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 10px 32px;
+            font-size: 14px;
+            width: 100%;
+            justify-content: center;
+        }
+        .load-more-wrap .btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        /* ── Bottom Navigation ── */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(10, 14, 23, 0.94);
+            backdrop-filter: blur(16px);
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            display: flex;
+            justify-content: space-around;
+            padding: 6px 0 calc(6px + var(--safe-bottom));
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.6);
+        }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 9px;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 4px 8px;
+            transition: var(--transition);
+            gap: 1px;
+            -webkit-tap-highlight-color: transparent;
+            min-width: 48px;
+        }
+        .nav-item .nav-icon {
+            font-size: 22px;
+            line-height: 1;
+        }
+        .nav-item.active {
+            color: var(--accent);
+        }
+        .nav-item.active .nav-icon {
+            transform: scale(1.05);
+        }
+
+        /* ── Modal ── */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 200;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(12px);
+            display: none;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 0;
+            animation: fadeIn 0.3s ease;
+        }
+        .modal-overlay.open {
+            display: flex;
+        }
+        .modal {
+            background: var(--bg-secondary);
+            width: 100%;
+            max-width: 600px;
+            max-height: 100vh;
+            overflow-y: auto;
+            border-radius: 0;
+            animation: slideUp 0.35s ease;
+            position: relative;
+        }
+        @keyframes slideUp {
+            from {
+                transform: translateY(40px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        .modal-close {
+            position: sticky;
+            top: 12px;
+            float: right;
+            margin: 12px 16px 0 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            border: none;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            font-size: 20px;
+            color: #fff;
+            cursor: pointer;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .modal-backdrop {
+            width: 100%;
+            height: 200px;
+            background-size: cover;
+            background-position: center center;
+            position: relative;
+        }
+        .modal-backdrop::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(0deg, var(--bg-secondary) 0%, transparent 80%);
+        }
+        .modal-body {
+            padding: 0 16px 20px;
+            margin-top: -40px;
+            position: relative;
+            z-index: 2;
+        }
+        .modal-body .modal-title {
+            font-size: 24px;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 2px;
+        }
+        .modal-body .modal-tagline {
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-style: italic;
+            margin-bottom: 6px;
+        }
+        .modal-body .modal-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px 16px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+        }
+        .modal-body .modal-meta span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .modal-body .modal-genres {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 10px;
+        }
+        .modal-body .modal-genres .genre-tag {
+            background: var(--bg-card);
+            padding: 2px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+        .modal-body .modal-overview {
+            font-size: 14px;
+            line-height: 1.7;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+        .modal-fav-btn {
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--text-secondary);
+            padding: 4px 8px;
+        }
+        .modal-fav-btn.active {
+            color: var(--accent);
+        }
+        .trailer-section {
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            padding-top: 16px;
+        }
+        .trailer-section h4 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .trailer-section h4 .trailer-count {
+            font-size: 12px;
+            font-weight: 400;
+            color: var(--text-secondary);
+        }
+        .trailer-embed {
+            position: relative;
+            padding-top: 56.25%;
+            border-radius: var(--radius);
+            overflow: hidden;
+            background: var(--bg-primary);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+        .trailer-embed iframe {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        .no-trailer {
+            padding: 24px 16px;
+            text-align: center;
+            color: var(--text-secondary);
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            border: 1px dashed rgba(255, 255, 255, 0.08);
+        }
+        .no-trailer .icon {
+            font-size: 32px;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        /* ── Loading ── */
+        .loading-spinner {
+            display: flex;
+            justify-content: center;
+            padding: 30px 0;
+            gap: 10px;
+            color: var(--text-secondary);
+        }
+        .spinner {
+            width: 28px;
+            height: 28px;
+            border: 3px solid rgba(255, 255, 255, 0.06);
+            border-top: 3px solid var(--accent);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* ── Seasons & Episodes (TV) ── */
+        .season-pills {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            margin-bottom: 12px;
+            scrollbar-width: none;
+            -webkit-overflow-scrolling: touch;
+        }
+        .season-pills::-webkit-scrollbar {
+            display: none;
+        }
+        .season-pill {
+            padding: 6px 16px;
+            background: var(--bg-card);
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            cursor: pointer;
+            white-space: nowrap;
+            transition: var(--transition);
+            flex-shrink: 0;
+        }
+        .season-pill.active {
+            background: var(--accent);
+            color: #fff;
+            border-color: var(--accent);
+        }
+        .episode-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            max-height: 260px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+        .episode-item {
+            padding: 10px 12px;
+            background: var(--bg-card);
+            border-radius: 8px;
+            border-left: 3px solid var(--accent);
+        }
+        .episode-item .episode-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .episode-item .episode-title {
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .episode-item .episode-airdate {
+            font-size: 11px;
+            color: var(--text-secondary);
+            flex-shrink: 0;
+            margin-left: 8px;
+        }
+        .episode-item .episode-overview {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .episode-loading {
+            display: flex;
+            justify-content: center;
+            padding: 20px 0;
+        }
+        .season-episodes-section {
+            margin-top: 16px;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            padding-top: 16px;
+        }
+        .season-episodes-section .section-label {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ─── HEADER ─── -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <span class="logo-icon">🎬</span> CineVerse
+            </div>
+        </div>
+    </header>
+
+    <!-- ─── MAIN CONTENT ─── -->
+    <main class="container">
+
+        <!-- HOME TAB -->
+        <section id="homeTab" class="tab-content active">
+            <!-- Hero -->
+            <div class="hero" id="hero">
+                <div class="hero-content">
+                    <span class="badge" id="heroBadge">Trending</span>
+                    <h1 id="heroTitle">Loading...</h1>
+                    <div class="meta" id="heroMeta">
+                        <span>⭐ <span id="heroRating">—</span></span>
+                        <span>📅 <span id="heroYear">—</span></span>
+                        <span id="heroType">🎬 Movie</span>
+                    </div>
+                    <p class="overview" id="heroOverview">Fetching the best picks...</p>
+                    <div class="hero-actions">
+                        <button class="btn btn-primary" id="heroTrailerBtn">▶ Trailer</button>
+                        <button class="btn btn-secondary" id="heroDetailsBtn">📖 Details</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Trending Movies -->
+            <div class="section-header">
+                <h2>🔥 Trending Movies</h2>
+                <span class="count" id="movieCount">0</span>
+            </div>
+            <div id="homeMovieGrid" class="grid"></div>
+
+            <!-- Trending TV Shows -->
+            <div class="section-header">
+                <h2>📺 Trending TV Shows</h2>
+                <span class="count" id="tvCount">0</span>
+            </div>
+            <div id="homeTvGrid" class="grid"></div>
+        </section>
+
+        <!-- MOVIES TAB -->
+        <section id="moviesTab" class="tab-content">
+            <div class="section-header">
+                <h2>🎬 Popular Movies</h2>
+                <span class="count" id="moviesTabCount">0</span>
+            </div>
+            <div id="moviesGrid" class="grid"></div>
+            <div class="load-more-wrap" id="moviesLoadMoreWrap">
+                <button class="btn" id="moviesLoadMoreBtn">Load More</button>
+            </div>
+        </section>
+
+        <!-- TV SHOWS TAB -->
+        <section id="tvTab" class="tab-content">
+            <div class="section-header">
+                <h2>📺 Popular TV Shows</h2>
+                <span class="count" id="tvTabCount">0</span>
+            </div>
+            <div id="tvGrid" class="grid"></div>
+            <div class="load-more-wrap" id="tvLoadMoreWrap">
+                <button class="btn" id="tvLoadMoreBtn">Load More</button>
+            </div>
+        </section>
+
+        <!-- SEARCH TAB -->
+        <section id="searchTab" class="tab-content search-tab">
+            <div class="search-wrap">
+                <input type="text" id="searchInput" placeholder="Search movies & TV shows..." />
+                <button id="searchBtn">Search</button>
+            </div>
+            <div id="searchResults" class="grid"></div>
+            <div class="load-more-wrap" id="searchLoadMoreWrap" style="display:none;">
+                <button class="btn" id="searchLoadMoreBtn">Load More</button>
+            </div>
+        </section>
+
+        <!-- FAVORITES TAB -->
+        <section id="favoritesTab" class="tab-content">
+            <div class="section-header">
+                <h2>❤️ Favorites</h2>
+                <span class="count" id="favCount">0</span>
+            </div>
+            <div id="favoritesGrid" class="grid"></div>
+        </section>
+
+    </main>
+
+    <!-- ─── BOTTOM NAV ─── -->
+    <nav class="bottom-nav" role="tablist">
+        <button class="nav-item active" data-tab="home" role="tab">
+            <span class="nav-icon">🏠</span>
+            <span>Home</span>
+        </button>
+        <button class="nav-item" data-tab="movies" role="tab">
+            <span class="nav-icon">🎬</span>
+            <span>Movies</span>
+        </button>
+        <button class="nav-item" data-tab="tv" role="tab">
+            <span class="nav-icon">📺</span>
+            <span>TV</span>
+        </button>
+        <button class="nav-item" data-tab="search" role="tab">
+            <span class="nav-icon">🔍</span>
+            <span>Search</span>
+        </button>
+        <button class="nav-item" data-tab="favorites" role="tab">
+            <span class="nav-icon">❤️</span>
+            <span>Favs</span>
+        </button>
+    </nav>
+
+    <!-- ─── MODAL ─── -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <button class="modal-close" id="modalClose">✕</button>
+            <div class="modal-backdrop" id="modalBackdrop"></div>
+            <div class="modal-body">
+                <div style="display:flex;align-items:center;justify-content:space-between;">
+                    <h2 class="modal-title" id="modalTitle">—</h2>
+                    <button class="modal-fav-btn" id="modalFavBtn">♡</button>
+                </div>
+                <p class="modal-tagline" id="modalTagline"></p>
+                <div class="modal-meta" id="modalMeta">
+                    <span>⭐ <span id="modalRating">—</span></span>
+                    <span>📅 <span id="modalYear">—</span></span>
+                    <span id="modalTypeBadge">🎬 Movie</span>
+                    <span>⏱ <span id="modalRuntime">—</span></span>
+                </div>
+                <div class="modal-genres" id="modalGenres"></div>
+                <p class="modal-overview" id="modalOverview">—</p>
+
+                <!-- Seasons & Episodes (TV only) -->
+                <div id="seasonEpisodesSection" class="season-episodes-section" style="display: none;">
+                    <div class="section-label">📺 Seasons & Episodes</div>
+                    <div id="seasonSelector" class="season-pills">
+                        <!-- Pills rendered by JS -->
+                    </div>
+                    <div id="episodeList" class="episode-list">
+                        <!-- Episodes rendered by JS -->
+                    </div>
+                </div>
+
+                <div class="trailer-section">
+                    <h4>🎥 Trailers <span class="trailer-count" id="trailerCount">(0)</span></h4>
+                    <div id="trailerContainer">
+                        <div class="no-trailer">
+                            <span class="icon">🎞️</span>
+                            <p>No trailer available</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  🔑 YOUR TMDB API KEY (v3)
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        const API_KEY = '77c1a81838fea47869506ff798f95404'; // <-- PASTE YOUR API KEY HERE
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+        const TMDB_BASE = 'https://api.themoviedb.org/3';
+        const IMG_BASE = 'https://image.tmdb.org/t/p';
+        const YT_EMBED = 'https://www.youtube.com/embed';
+
+        // ─── State ───
+        let currentTab = 'home';
+
+        // Home state
+        let homeMovies = [];
+        let homeTv = [];
+        let heroItem = null;
+
+        // Movies tab state
+        let moviesPage = 1;
+        let moviesTotalPages = 0;
+        let moviesItems = [];
+        let isLoadingMovies = false;
+
+        // TV tab state
+        let tvPage = 1;
+        let tvTotalPages = 0;
+        let tvItems = [];
+        let isLoadingTv = false;
+
+        // Search state
+        let searchQuery = '';
+        let searchPage = 1;
+        let searchTotalPages = 0;
+        let isLoadingSearch = false;
+        let searchResults = [];
+
+        // ─── DOM refs ───
+        const $ = id => document.getElementById(id);
+        const homeTab = $('homeTab');
+        const moviesTab = $('moviesTab');
+        const tvTab = $('tvTab');
+        const searchTab = $('searchTab');
+        const favoritesTab = $('favoritesTab');
+        const navItems = document.querySelectorAll('.nav-item');
+
+        const hero = $('hero');
+        const heroTitle = $('heroTitle');
+        const heroRating = $('heroRating');
+        const heroYear = $('heroYear');
+        const heroType = $('heroType');
+        const heroOverview = $('heroOverview');
+        const heroBadge = $('heroBadge');
+        const heroTrailerBtn = $('heroTrailerBtn');
+        const heroDetailsBtn = $('heroDetailsBtn');
+
+        const homeMovieGrid = $('homeMovieGrid');
+        const homeTvGrid = $('homeTvGrid');
+        const movieCount = $('movieCount');
+        const tvCount = $('tvCount');
+
+        const moviesGrid = $('moviesGrid');
+        const moviesTabCount = $('moviesTabCount');
+        const moviesLoadMoreBtn = $('moviesLoadMoreBtn');
+        const moviesLoadMoreWrap = $('moviesLoadMoreWrap');
+
+        const tvGrid = $('tvGrid');
+        const tvTabCount = $('tvTabCount');
+        const tvLoadMoreBtn = $('tvLoadMoreBtn');
+        const tvLoadMoreWrap = $('tvLoadMoreWrap');
+
+        const searchInput = $('searchInput');
+        const searchBtn = $('searchBtn');
+        const searchResultsDiv = $('searchResults');
+        const searchLoadMoreWrap = $('searchLoadMoreWrap');
+        const searchLoadMoreBtn = $('searchLoadMoreBtn');
+
+        const favoritesGrid = $('favoritesGrid');
+        const favCount = $('favCount');
+
+        const modalOverlay = $('modalOverlay');
+        const modalClose = $('modalClose');
+        const modalBackdrop = $('modalBackdrop');
+        const modalTitle = $('modalTitle');
+        const modalTagline = $('modalTagline');
+        const modalRating = $('modalRating');
+        const modalYear = $('modalYear');
+        const modalTypeBadge = $('modalTypeBadge');
+        const modalRuntime = $('modalRuntime');
+        const modalGenres = $('modalGenres');
+        const modalOverview = $('modalOverview');
+        const modalFavBtn = $('modalFavBtn');
+        const trailerContainer = $('trailerContainer');
+        const trailerCount = $('trailerCount');
+
+        // Season & Episode refs
+        const seasonEpisodesSection = $('seasonEpisodesSection');
+        const seasonSelector = $('seasonSelector');
+        const episodeList = $('episodeList');
+
+        // ─── API helpers ───
+        async function fetchTMDB(endpoint, params = {}) {
+            if (!API_KEY || API_KEY === 'YOUR_API_KEY_HERE') {
+                throw new Error('Please set your TMDB API key in the script.');
+            }
+            const qs = new URLSearchParams({ ...params, api_key: API_KEY });
+            const url = `${TMDB_BASE}${endpoint}?${qs}`;
+            const res = await fetch(url);
+            if (!res.ok) {
+                let msg = `HTTP ${res.status}`;
+                try {
+                    const err = await res.json();
+                    if (err.status_message) msg = err.status_message;
+                } catch (_) {}
+                throw new Error(msg);
+            }
+            return res.json();
+        }
+
+        function imageUrl(path, size = 'w200') { return path ? `${IMG_BASE}/${size}${path}` : ''; }
+
+        function posterUrl(path) { return imageUrl(path, 'w200'); }
+
+        function backdropUrl(path) { return path ? `${IMG_BASE}/original${path}` : ''; }
+
+        // ─── Helpers ───
+        function getTitle(item, type) { return type === 'movie' ? item.title : item.name; }
+
+        function getDate(item, type) { return type === 'movie' ? item.release_date : item.first_air_date; }
+
+        function getYear(date) { return date ? new Date(date).getFullYear() : '—'; }
+
+        function getRuntime(item, type) {
+            if (type === 'movie') return item.runtime ? `${item.runtime}m` : '—';
+            return item.number_of_seasons ? `${item.number_of_seasons} seasons` : '—';
+        }
+
+        function getTypeLabel(type) { return type === 'movie' ? '🎬 Movie' : '📺 TV Show'; }
+
+        // ─── Favorites ───
+        function getFavorites() {
+            try {
+                return JSON.parse(localStorage.getItem('favs') || '[]');
+            } catch { return []; }
+        }
+
+        function saveFavorites(favs) {
+            localStorage.setItem('favs', JSON.stringify(favs));
+        }
+
+        function isFavorite(id, type) {
+            const favs = getFavorites();
+            return favs.some(f => f.id === id && f.type === type);
+        }
+
+        function toggleFavorite(item, type) {
+            let favs = getFavorites();
+            const index = favs.findIndex(f => f.id === item.id && f.type === type);
+            if (index > -1) {
+                favs.splice(index, 1);
+            } else {
+                favs.push({
+                    id: item.id,
+                    type: type,
+                    title: getTitle(item, type),
+                    poster: item.poster_path,
+                    year: getYear(getDate(item, type)),
+                    rating: item.vote_average?.toFixed(1) || '—'
+                });
+            }
+            saveFavorites(favs);
+            updateFavUI();
+            return favs;
+        }
+
+        function updateFavUI() {
+            const favs = getFavorites();
+            favCount.textContent = favs.length;
+            renderFavorites();
+            if (currentTab === 'home') {
+                renderCards(homeMovieGrid, homeMovies, 'movie');
+                renderCards(homeTvGrid, homeTv, 'tv');
+            } else if (currentTab === 'movies') {
+                renderCards(moviesGrid, moviesItems, 'movie');
+            } else if (currentTab === 'tv') {
+                renderCards(tvGrid, tvItems, 'tv');
+            } else if (currentTab === 'search') {
+                renderSearchResults(searchResults);
+            }
+        }
+
+        // ─── Render card (with fav button) ───
+        function createCard(item, type, clickHandler = null) {
+            const title = getTitle(item, type);
+            const year = getYear(getDate(item, type));
+            const rating = item.vote_average?.toFixed(1) || '—';
+            const poster = posterUrl(item.poster_path);
+            const typeLabel = type === 'movie' ? 'Movie' : 'TV';
+            const fav = isFavorite(item.id, type);
+
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.setAttribute('data-id', item.id);
+            card.setAttribute('data-type', type);
+
+            card.innerHTML = `
+                <div class="card-poster">
+                    ${poster ? `<img src="${poster}" alt="${title}" loading="lazy" />` : `<div style="display:flex;align-items:center;justify-content:center;height:100%;background:var(--bg-card);color:var(--text-secondary);font-size:32px;">🎬</div>`}
+                    <span class="rating">⭐ ${rating}</span>
+                    <span class="type-badge">${typeLabel}</span>
+                </div>
+                <div class="card-body">
+                    <h3>${title}</h3>
+                    <div class="card-meta">
+                        <span>${year}</span>
+                        <span class="dot"></span>
+                        <span>⭐ ${rating}</span>
+                    </div>
+                </div>
+                <button class="card-fav-btn ${fav ? 'active' : ''}" data-id="${item.id}" data-type="${type}">${fav ? '❤️' : '♡'}</button>
+            `;
+
+            card.addEventListener('click', (e) => {
+                if (e.target.closest('.card-fav-btn')) return;
+                if (clickHandler) clickHandler(item, type);
+                else openModal(item, type);
+            });
+
+            const favBtn = card.querySelector('.card-fav-btn');
+            favBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const newFavs = toggleFavorite(item, type);
+                const isNowFav = newFavs.some(f => f.id === item.id && f.type === type);
+                favBtn.textContent = isNowFav ? '❤️' : '♡';
+                favBtn.classList.toggle('active', isNowFav);
+                if (modalOverlay.classList.contains('open') && modalData && modalData.id === item.id && modalData.type ===
+                    type) {
+                    modalFavBtn.textContent = isNowFav ? '❤️' : '♡';
+                    modalFavBtn.classList.toggle('active', isNowFav);
+                }
+                favCount.textContent = getFavorites().length;
+                renderFavorites();
+            });
+
+            return card;
+        }
+
+        function renderCards(container, items, type, clickHandler = null) {
+            container.innerHTML = '';
+            if (!items || items.length === 0) {
+                container.innerHTML = `<div class="empty-state"><span class="big-icon">📭</span><h3>Nothing here</h3></div>`;
+                return;
+            }
+            const fragment = document.createDocumentFragment();
+            items.forEach(item => {
+                fragment.appendChild(createCard(item, type, clickHandler));
+            });
+            container.appendChild(fragment);
+        }
+
+        // ─── Home: load trending ───
+        async function loadHome() {
+            try {
+                const [movieData, tvData] = await Promise.all([
+                    fetchTMDB('/trending/movie/day', { page: 1 }),
+                    fetchTMDB('/trending/tv/day', { page: 1 })
+                ]);
+
+                homeMovies = movieData.results || [];
+                homeTv = tvData.results || [];
+
+                movieCount.textContent = homeMovies.length;
+                tvCount.textContent = homeTv.length;
+
+                renderCards(homeMovieGrid, homeMovies, 'movie');
+                renderCards(homeTvGrid, homeTv, 'tv');
+
+                if (homeMovies.length > 0) {
+                    heroItem = homeMovies[0];
+                    setHero(heroItem, 'movie');
+                } else if (homeTv.length > 0) {
+                    heroItem = homeTv[0];
+                    setHero(heroItem, 'tv');
+                } else {
+                    setHero(null, 'movie');
+                }
+            } catch (err) {
+                console.error(err);
+                homeMovieGrid.innerHTML =
+                    `<div class="empty-state"><span class="big-icon">⚠️</span><h3>Error</h3><p>${err.message}</p></div>`;
+                homeTvGrid.innerHTML = '';
+                setHero(null, 'movie');
+            }
+        }
+
+        // ─── Hero ───
+        function setHero(item, type) {
+            if (!item) {
+                hero.style.backgroundImage = '';
+                heroTitle.textContent = 'Welcome to CineVerse';
+                heroRating.textContent = '—';
+                heroYear.textContent = '—';
+                heroType.textContent = '🎬 Movie';
+                heroOverview.textContent = 'Set your TMDB API key to start.';
+                heroBadge.textContent = '✨';
+                return;
+            }
+            const title = getTitle(item, type);
+            const year = getYear(getDate(item, type));
+            const rating = item.vote_average?.toFixed(1) || '—';
+            const backdrop = backdropUrl(item.backdrop_path || item.poster_path);
+            const overview = item.overview || 'No overview.';
+
+            hero.style.backgroundImage = backdrop ? `url(${backdrop})` : '';
+            heroTitle.textContent = title;
+            heroRating.textContent = rating;
+            heroYear.textContent = year;
+            heroType.textContent = getTypeLabel(type);
+            heroOverview.textContent = overview;
+            heroBadge.textContent = type === 'movie' ? '🔥 Trending Movie' : '📺 Trending TV';
+
+            heroTrailerBtn.dataset.id = item.id;
+            heroTrailerBtn.dataset.type = type;
+            heroDetailsBtn.dataset.id = item.id;
+            heroDetailsBtn.dataset.type = type;
+        }
+
+        // ─── Movies tab ───
+        async function loadMovies(page = 1, append = false) {
+            if (isLoadingMovies) return;
+            isLoadingMovies = true;
+            moviesLoadMoreBtn.disabled = true;
+            moviesLoadMoreBtn.textContent = 'Loading…';
+
+            try {
+                const data = await fetchTMDB('/movie/popular', { page });
+                const results = data.results || [];
+                moviesTotalPages = data.total_pages;
+
+                if (!append) {
+                    moviesItems = results;
+                    renderCards(moviesGrid, moviesItems, 'movie');
+                } else {
+                    moviesItems = [...moviesItems, ...results];
+                    renderCards(moviesGrid, moviesItems, 'movie');
+                }
+                moviesTabCount.textContent = moviesItems.length;
+                moviesLoadMoreWrap.style.display = (page < moviesTotalPages) ? 'block' : 'none';
+                moviesPage = page;
+            } catch (err) {
+                console.error(err);
+                moviesGrid.innerHTML =
+                    `<div class="empty-state"><span class="big-icon">⚠️</span><h3>Error</h3><p>${err.message}</p></div>`;
+            }
+            isLoadingMovies = false;
+            moviesLoadMoreBtn.disabled = false;
+            moviesLoadMoreBtn.textContent = 'Load More';
+        }
+
+        // ─── TV tab ───
+        async function loadTv(page = 1, append = false) {
+            if (isLoadingTv) return;
+            isLoadingTv = true;
+            tvLoadMoreBtn.disabled = true;
+            tvLoadMoreBtn.textContent = 'Loading…';
+
+            try {
+                const data = await fetchTMDB('/tv/popular', { page });
+                const results = data.results || [];
+                tvTotalPages = data.total_pages;
+
+                if (!append) {
+                    tvItems = results;
+                    renderCards(tvGrid, tvItems, 'tv');
+                } else {
+                    tvItems = [...tvItems, ...results];
+                    renderCards(tvGrid, tvItems, 'tv');
+                }
+                tvTabCount.textContent = tvItems.length;
+                tvLoadMoreWrap.style.display = (page < tvTotalPages) ? 'block' : 'none';
+                tvPage = page;
+            } catch (err) {
+                console.error(err);
+                tvGrid.innerHTML =
+                    `<div class="empty-state"><span class="big-icon">⚠️</span><h3>Error</h3><p>${err.message}</p></div>`;
+            }
+            isLoadingTv = false;
+            tvLoadMoreBtn.disabled = false;
+            tvLoadMoreBtn.textContent = 'Load More';
+        }
+
+        // ─── Search ───
+        async function performSearch(page = 1) {
+            if (isLoadingSearch) return;
+            const q = searchInput.value.trim();
+            if (!q) {
+                searchResults = [];
+                searchResultsDiv.innerHTML =
+                    `<div class="empty-state"><span class="big-icon">🔍</span><h3>Type something to search</h3></div>`;
+                searchLoadMoreWrap.style.display = 'none';
+                return;
+            }
+            searchQuery = q;
+            isLoadingSearch = true;
+            searchLoadMoreBtn.disabled = true;
+            searchLoadMoreBtn.textContent = 'Loading…';
+
+            try {
+                const [movieData, tvData] = await Promise.all([
+                    fetchTMDB('/search/movie', { query: q, page }),
+                    fetchTMDB('/search/tv', { query: q, page })
+                ]);
+                const movies = movieData.results || [];
+                const tvs = tvData.results || [];
+                const combined = [...movies, ...tvs];
+                const items = combined.map(item => {
+                    const isMovie = movieData.results.some(m => m.id === item.id && m.title);
+                    return { ...item, _type: isMovie ? 'movie' : 'tv' };
+                });
+                searchResults = items;
+                renderSearchResults(items);
+                searchLoadMoreWrap.style.display = 'none';
+            } catch (err) {
+                console.error(err);
+                searchResultsDiv.innerHTML =
+                    `<div class="empty-state"><span class="big-icon">⚠️</span><h3>Error</h3><p>${err.message}</p></div>`;
+            }
+            isLoadingSearch = false;
+            searchLoadMoreBtn.disabled = false;
+            searchLoadMoreBtn.textContent = 'Load More';
+        }
+
+        function renderSearchResults(items) {
+            if (!items || items.length === 0) {
+                searchResultsDiv.innerHTML =
+                    `<div class="empty-state"><span class="big-icon">🔍</span><h3>No results</h3><p>Try a different search.</p></div>`;
+                return;
+            }
+            const fragment = document.createDocumentFragment();
+            items.forEach(item => {
+                const type = item._type || (item.title ? 'movie' : 'tv');
+                fragment.appendChild(createCard(item, type, null));
+            });
+            searchResultsDiv.innerHTML = '';
+            searchResultsDiv.appendChild(fragment);
+        }
+
+        // ─── Favorites ───
+        function renderFavorites() {
+            const favs = getFavorites();
+            favCount.textContent = favs.length;
+            if (favs.length === 0) {
+                favoritesGrid.innerHTML =
+                    `<div class="empty-state"><span class="big-icon">❤️</span><h3>No favorites yet</h3><p>Tap the heart on any movie or TV show to save it.</p></div>`;
+                return;
+            }
+            const fragment = document.createDocumentFragment();
+            favs.forEach(fav => {
+                const item = {
+                    id: fav.id,
+                    title: fav.title,
+                    poster_path: fav.poster,
+                    vote_average: parseFloat(fav.rating) || 0,
+                };
+                const card = createCard(item, fav.type, null);
+                const favBtn = card.querySelector('.card-fav-btn');
+                favBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    toggleFavorite(item, fav.type);
+                    renderFavorites();
+                });
+                card.addEventListener('click', () => {
+                    openModal({ id: fav.id, _type: fav.type }, fav.type);
+                });
+                fragment.appendChild(card);
+            });
+            favoritesGrid.innerHTML = '';
+            favoritesGrid.appendChild(fragment);
+        }
+
+        // ─── Seasons & Episodes (TV) ───
+        let modalData = null;
+
+        function renderSeasons(tvDetails) {
+            const seasons = tvDetails.seasons || [];
+            // Filter out empty seasons or just show all
+            const validSeasons = seasons.filter(s => s.episode_count > 0);
+
+            if (!validSeasons.length) {
+                seasonEpisodesSection.style.display = 'none';
+                return;
+            }
+
+            seasonEpisodesSection.style.display = 'block';
+            seasonSelector.innerHTML = '';
+
+            validSeasons.forEach((season, index) => {
+                const pill = document.createElement('button');
+                pill.className = 'season-pill';
+                if (index === 0) pill.classList.add('active');
+                pill.textContent = season.name || `Season ${season.season_number}`;
+                pill.dataset.seasonNumber = season.season_number;
+                pill.addEventListener('click', () => {
+                    document.querySelectorAll('.season-pill').forEach(p => p.classList.remove('active'));
+                    pill.classList.add('active');
+                    fetchEpisodes(tvDetails.id, season.season_number);
+                });
+                seasonSelector.appendChild(pill);
+            });
+
+            // Load episodes for the first season by default
+            if (validSeasons.length > 0) {
+                fetchEpisodes(tvDetails.id, validSeasons[0].season_number);
+            }
+        }
+
+        async function fetchEpisodes(tvId, seasonNumber) {
+            episodeList.innerHTML = `<div class="episode-loading"><div class="spinner"></div></div>`;
+            try {
+                const data = await fetchTMDB(`/tv/${tvId}/season/${seasonNumber}`);
+                const episodes = data.episodes || [];
+                if (!episodes.length) {
+                    episodeList.innerHTML =
+                        `<div class="empty-state" style="padding:16px;"><span class="big-icon">📭</span><h3>No episodes found</h3></div>`;
+                    return;
+                }
+                const fragment = document.createDocumentFragment();
+                episodes.forEach(ep => {
+                    const item = document.createElement('div');
+                    item.className = 'episode-item';
+                    const airDate = ep.air_date ? new Date(ep.air_date).toLocaleDateString() : 'TBA';
+                    const overview = ep.overview || '';
+                    item.innerHTML = `
+                        <div class="episode-header">
+                            <span class="episode-title">${ep.episode_number}. ${ep.name}</span>
+                            <span class="episode-airdate">${airDate}</span>
+                        </div>
+                        ${overview ? `<div class="episode-overview">${overview}</div>` : ''}
+                    `;
+                    fragment.appendChild(item);
+                });
+                episodeList.innerHTML = '';
+                episodeList.appendChild(fragment);
+            } catch (err) {
+                console.error(err);
+                episodeList.innerHTML =
+                    `<div class="empty-state" style="padding:16px;"><span class="big-icon">⚠️</span><h3>Error loading episodes</h3></div>`;
+            }
+        }
+
+        // ─── Modal ───
+        async function openModal(item, type) {
+            const id = item.id;
+            let details = item;
+            if (!item.title && !item.name) {
+                try {
+                    details = await fetchDetails(type, id);
+                } catch (_) { details = item; }
+            }
+            const title = getTitle(details, type);
+            const year = getYear(getDate(details, type));
+            const rating = details.vote_average?.toFixed(1) || '—';
+            const backdrop = backdropUrl(details.backdrop_path || details.poster_path);
+            const overview = details.overview || 'No overview.';
+            const typeLabel = getTypeLabel(type);
+
+            let runtime = getRuntime(details, type);
+            let genres = details.genres || [];
+            let tagline = details.tagline || '';
+
+            if (!details.genres) {
+                try {
+                    const full = await fetchDetails(type, id);
+                    runtime = getRuntime(full, type);
+                    genres = full.genres || [];
+                    tagline = full.tagline || '';
+                    details = full;
+                } catch (_) {}
+            }
+
+            modalBackdrop.style.backgroundImage = backdrop ? `url(${backdrop})` : '';
+            modalTitle.textContent = title;
+            modalTagline.textContent = tagline;
+            modalRating.textContent = rating;
+            modalYear.textContent = year;
+            modalTypeBadge.textContent = typeLabel;
+            modalRuntime.textContent = runtime;
+            modalOverview.textContent = overview;
+
+            modalGenres.innerHTML = genres.map(g =>
+                `<span class="genre-tag">${g.name}</span>`
+            ).join('') || '<span class="genre-tag">—</span>';
+
+            const fav = isFavorite(id, type);
+            modalFavBtn.textContent = fav ? '❤️' : '♡';
+            modalFavBtn.classList.toggle('active', fav);
+
+            // Seasons & Episodes (TV only)
+            if (type === 'tv' && details.seasons) {
+                renderSeasons(details);
+            } else {
+                seasonEpisodesSection.style.display = 'none';
+            }
+
+            // Trailers
+            let videos = [];
+            let trailerKey = null;
+            try {
+                videos = await fetchVideos(type, id);
+                const trailer = videos.find(v =>
+                    v.site === 'YouTube' && v.type === 'Trailer'
+                ) || videos.find(v => v.site === 'YouTube');
+                trailerKey = trailer ? trailer.key : null;
+            } catch (_) {}
+
+            trailerCount.textContent = `(${trailerKey ? 1 : 0})`;
+            if (trailerKey) {
+                trailerContainer.innerHTML = `
+                    <div class="trailer-embed">
+                        <iframe src="${YT_EMBED}/${trailerKey}?autoplay=0&rel=0" allowfullscreen loading="lazy"></iframe>
+                    </div>
+                `;
+            } else {
+                trailerContainer.innerHTML = `
+                    <div class="no-trailer">
+                        <span class="icon">🎞️</span>
+                        <p>No trailer available.</p>
+                    </div>
+                `;
+            }
+
+            modalData = { id, type, details };
+            modalOverlay.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            modalOverlay.classList.remove('open');
+            document.body.style.overflow = '';
+            const iframe = trailerContainer.querySelector('iframe');
+            if (iframe) iframe.src = iframe.src;
+        }
+
+        // ─── Event Bindings ───
+
+        navItems.forEach(item => {
+            item.addEventListener('click', () => {
+                navItems.forEach(n => n.classList.remove('active'));
+                item.classList.add('active');
+                const tab = item.dataset.tab;
+                currentTab = tab;
+                document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+                if (tab === 'home') {
+                    homeTab.classList.add('active');
+                    if (homeMovies.length === 0) loadHome();
+                } else if (tab === 'movies') {
+                    moviesTab.classList.add('active');
+                    if (moviesItems.length === 0) loadMovies(1, false);
+                } else if (tab === 'tv') {
+                    tvTab.classList.add('active');
+                    if (tvItems.length === 0) loadTv(1, false);
+                } else if (tab === 'search') {
+                    searchTab.classList.add('active');
+                    if (!searchInput.value.trim()) {
+                        searchResultsDiv.innerHTML =
+                            `<div class="empty-state"><span class="big-icon">🔍</span><h3>Search for movies & TV shows</h3></div>`;
+                        searchLoadMoreWrap.style.display = 'none';
+                    }
+                } else if (tab === 'favorites') {
+                    favoritesTab.classList.add('active');
+                    renderFavorites();
+                }
+            });
+        });
+
+        searchBtn.addEventListener('click', () => performSearch(1));
+        searchInput.addEventListener('keydown', e => {
+            if (e.key === 'Enter') performSearch(1);
+        });
+
+        moviesLoadMoreBtn.addEventListener('click', () => {
+            if (!isLoadingMovies && moviesPage < moviesTotalPages) {
+                loadMovies(moviesPage + 1, true);
+            }
+        });
+
+        tvLoadMoreBtn.addEventListener('click', () => {
+            if (!isLoadingTv && tvPage < tvTotalPages) {
+                loadTv(tvPage + 1, true);
+            }
+        });
+
+        heroTrailerBtn.addEventListener('click', () => {
+            const id = heroTrailerBtn.dataset.id;
+            const type = heroTrailerBtn.dataset.type;
+            if (id && type) {
+                let item = homeMovies.find(i => i.id == id) || homeTv.find(i => i.id == id);
+                if (item) openModal(item, type);
+            }
+        });
+        heroDetailsBtn.addEventListener('click', () => {
+            const id = heroDetailsBtn.dataset.id;
+            const type = heroDetailsBtn.dataset.type;
+            if (id && type) {
+                let item = homeMovies.find(i => i.id == id) || homeTv.find(i => i.id == id);
+                if (item) openModal(item, type);
+            }
+        });
+
+        modalClose.addEventListener('click', closeModal);
+        modalOverlay.addEventListener('click', e => {
+            if (e.target === modalOverlay) closeModal();
+        });
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') closeModal();
+        });
+
+        modalFavBtn.addEventListener('click', () => {
+            if (!modalData) return;
+            const { id, type, details } = modalData;
+            const newFavs = toggleFavorite(details, type);
+            const isNowFav = newFavs.some(f => f.id === id && f.type === type);
+            modalFavBtn.textContent = isNowFav ? '❤️' : '♡';
+            modalFavBtn.classList.toggle('active', isNowFav);
+            updateFavUI();
+        });
+
+        // ─── Init ───
+        if (!API_KEY || API_KEY === 'YOUR_API_KEY_HERE') {
+            homeMovieGrid.innerHTML =
+                `<div class="empty-state"><span class="big-icon">🔑</span><h3>TMDB API Key Required</h3><p>Paste your key into the <strong>API_KEY</strong> variable in the script.</p></div>`;
+            setHero(null, 'movie');
+        } else {
+            loadHome();
+        }
+
+        console.log('🎬 CineVerse Mobile ready.');
+    </script>
+</body>
+</html>
