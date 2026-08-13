@@ -755,9 +755,212 @@
             align-items: center;
             gap: 8px;
         }
+
+        /* ── Horizontal Scroll Sections ── */
+        .horizontal-scroll {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            padding: 8px 0 16px 0;
+            scrollbar-width: thin;
+            -webkit-overflow-scrolling: touch;
+            margin-bottom: 8px;
+            scroll-snap-type: x mandatory;
+            flex-wrap: nowrap;
+        }
+        .horizontal-scroll::-webkit-scrollbar {
+            height: 4px;
+        }
+        .horizontal-scroll::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 4px;
+        }
+        .horizontal-scroll::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+
+        .horizontal-card {
+            flex: 0 0 140px;
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            overflow: hidden;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            position: relative;
+            scroll-snap-align: start;
+            display: flex;
+            flex-direction: column;
+        }
+        .horizontal-card:active {
+            transform: scale(0.96);
+        }
+        .horizontal-card .card-poster {
+            flex: 0 0 auto;
+            padding-top: 150%;
+            position: relative;
+            background: var(--bg-secondary);
+            overflow: hidden;
+            width: 100%;
+        }
+        .horizontal-card .card-poster img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .horizontal-card .card-poster .rating {
+            position: absolute;
+            bottom: 4px;
+            right: 4px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 1px 6px;
+            border-radius: 10px;
+            font-size: 10px;
+            font-weight: 700;
+            color: #fcd34d;
+        }
+        .horizontal-card .card-body {
+            padding: 8px 10px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-width: 0;
+        }
+        .horizontal-card .card-body h3 {
+            font-size: 13px;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .horizontal-card .card-body .card-meta {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+        .horizontal-card .card-fav-btn {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            background: rgba(0, 0, 0, 0.6);
+            border: none;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            font-size: 14px;
+            color: #fff;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 5;
+        }
+        .horizontal-card .card-fav-btn.active {
+            color: var(--accent);
+        }
+        .horizontal-card .type-badge {
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 1px 6px;
+            border-radius: 10px;
+            font-size: 8px;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+        }
+
+        /* ── Home specific horizontal overrides ── */
+        #homeMovieGrid,
+        #homeTvGrid {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            gap: 14px;
+            overflow-x: auto;
+            padding: 8px 0 16px 0;
+            scrollbar-width: thin;
+            -webkit-overflow-scrolling: touch;
+            scroll-snap-type: x mandatory;
+            margin-bottom: 8px;
+        }
+        #homeMovieGrid::-webkit-scrollbar,
+        #homeTvGrid::-webkit-scrollbar {
+            height: 4px;
+        }
+        #homeMovieGrid::-webkit-scrollbar-thumb,
+        #homeTvGrid::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 4px;
+        }
+        #homeMovieGrid::-webkit-scrollbar-track,
+        #homeTvGrid::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+        #homeMovieGrid .horizontal-card,
+        #homeTvGrid .horizontal-card {
+            flex: 0 0 140px;
+            scroll-snap-align: start;
+        }
+
+        /* ── Loading Screen ── */
+        .loading-screen {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: var(--bg-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 24px;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+            opacity: 1;
+            visibility: visible;
+        }
+        .loading-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+        .loader-content {
+            text-align: center;
+        }
+        .loader-content .spinner {
+            width: 48px;
+            height: 48px;
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-top: 4px solid var(--accent);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 16px;
+        }
+        .loader-content p {
+            font-size: 16px;
+            color: var(--text-secondary);
+            font-weight: 500;
+            letter-spacing: 0.3px;
+        }
+        .loader-content .logo-icon {
+            font-size: 48px;
+            display: block;
+            margin-bottom: 8px;
+        }
     </style>
 </head>
 <body>
+
+    <!-- ─── LOADING SCREEN ─── -->
+    <div id="loadingScreen" class="loading-screen">
+        <div class="loader-content">
+            <span class="logo-icon">🎬</span>
+            <div class="spinner"></div>
+            <p>Loading CineVerse...</p>
+        </div>
+    </div>
 
     <!-- ─── HEADER ─── -->
     <header class="header">
@@ -796,20 +999,32 @@
                 <h2>🔥 Trending Movies</h2>
                 <span class="count" id="movieCount">0</span>
             </div>
-            <div id="homeMovieGrid" class="grid"></div>
+            <div id="homeMovieGrid" class="horizontal-scroll"></div>
 
             <!-- Trending TV Shows -->
             <div class="section-header">
                 <h2>📺 Trending TV Shows</h2>
                 <span class="count" id="tvCount">0</span>
             </div>
-            <div id="homeTvGrid" class="grid"></div>
+            <div id="homeTvGrid" class="horizontal-scroll"></div>
+
+            <!-- Hulu Section -->
+            <div class="section-header">
+                <h2>📺 Hulu Originals & Exclusives</h2>
+            </div>
+            <div class="horizontal-scroll" id="huluContainer"></div>
+
+            <!-- Apple TV+ Section -->
+            <div class="section-header">
+                <h2>🍎 Apple TV+ Originals</h2>
+            </div>
+            <div class="horizontal-scroll" id="appleContainer"></div>
         </section>
 
         <!-- MOVIES TAB -->
         <section id="moviesTab" class="tab-content">
             <div class="section-header">
-                <h2>🎬 Popular Movies</h2>
+                <h2>🎬 Movies</h2>
                 <span class="count" id="moviesTabCount">0</span>
             </div>
             <div id="moviesGrid" class="grid"></div>
@@ -821,7 +1036,7 @@
         <!-- TV SHOWS TAB -->
         <section id="tvTab" class="tab-content">
             <div class="section-header">
-                <h2>📺 Popular TV Shows</h2>
+                <h2>📺 TV Shows</h2>
                 <span class="count" id="tvTabCount">0</span>
             </div>
             <div id="tvGrid" class="grid"></div>
@@ -932,6 +1147,10 @@
         const IMG_BASE = 'https://image.tmdb.org/t/p';
         const YT_EMBED = 'https://www.youtube.com/embed';
 
+        // Provider IDs
+        const HULU_PROVIDER_ID = 15;
+        const APPLE_PROVIDER_ID = 350;
+
         // ─── State ───
         let currentTab = 'home';
 
@@ -1022,6 +1241,23 @@
         const seasonSelector = $('seasonSelector');
         const episodeList = $('episodeList');
 
+        // Horizontal refs
+        const huluContainer = $('huluContainer');
+        const appleContainer = $('appleContainer');
+
+        // ─── Loading Screen ───
+        const loadingScreen = $('loadingScreen');
+
+        function hideLoadingScreen() {
+            if (loadingScreen) {
+                loadingScreen.classList.add('hidden');
+                // Remove from DOM after transition to avoid blocking clicks
+                setTimeout(() => {
+                    loadingScreen.style.display = 'none';
+                }, 700);
+            }
+        }
+
         // ─── API helpers ───
         async function fetchTMDB(endpoint, params = {}) {
             if (!API_KEY || API_KEY === 'YOUR_API_KEY_HERE') {
@@ -1102,8 +1338,10 @@
             favCount.textContent = favs.length;
             renderFavorites();
             if (currentTab === 'home') {
-                renderCards(homeMovieGrid, homeMovies, 'movie');
-                renderCards(homeTvGrid, homeTv, 'tv');
+                renderHorizontalCards('homeMovieGrid', homeMovies, 'movie');
+                renderHorizontalCards('homeTvGrid', homeTv, 'tv');
+                renderHorizontalCards('huluContainer', huluData);
+                renderHorizontalCards('appleContainer', appleData);
             } else if (currentTab === 'movies') {
                 renderCards(moviesGrid, moviesItems, 'movie');
             } else if (currentTab === 'tv') {
@@ -1113,7 +1351,7 @@
             }
         }
 
-        // ─── Render card (with fav button) ───
+        // ─── Render vertical card (with fav button) ───
         function createCard(item, type, clickHandler = null) {
             const title = getTitle(item, type);
             const year = getYear(getDate(item, type));
@@ -1182,22 +1420,129 @@
             container.appendChild(fragment);
         }
 
-        // ─── Home: load trending ───
+        // ─── Render horizontal cards ───
+        let huluData = [];
+        let appleData = [];
+
+        function createHorizontalCard(item, type) {
+            const title = getTitle(item, type);
+            const year = getYear(getDate(item, type));
+            const rating = item.vote_average?.toFixed(1) || '—';
+            const poster = posterUrl(item.poster_path);
+            const typeLabel = type === 'movie' ? 'Movie' : 'TV';
+            const fav = isFavorite(item.id, type);
+
+            const card = document.createElement('div');
+            card.className = 'horizontal-card';
+            card.setAttribute('data-id', item.id);
+            card.setAttribute('data-type', type);
+
+            card.innerHTML = `
+                <div class="card-poster">
+                    ${poster ? `<img src="${poster}" alt="${title}" loading="lazy" />` : `<div style="display:flex;align-items:center;justify-content:center;height:100%;background:var(--bg-card);color:var(--text-secondary);font-size:24px;">🎬</div>`}
+                    <span class="rating">⭐ ${rating}</span>
+                    <span class="type-badge">${typeLabel}</span>
+                </div>
+                <div class="card-body">
+                    <h3>${title}</h3>
+                    <div class="card-meta">${year}</div>
+                </div>
+                <button class="card-fav-btn ${fav ? 'active' : ''}" data-id="${item.id}" data-type="${type}">${fav ? '❤️' : '♡'}</button>
+            `;
+
+            card.addEventListener('click', (e) => {
+                if (e.target.closest('.card-fav-btn')) return;
+                openModal(item, type);
+            });
+
+            const favBtn = card.querySelector('.card-fav-btn');
+            favBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const newFavs = toggleFavorite(item, type);
+                const isNowFav = newFavs.some(f => f.id === item.id && f.type === type);
+                favBtn.textContent = isNowFav ? '❤️' : '♡';
+                favBtn.classList.toggle('active', isNowFav);
+                if (modalOverlay.classList.contains('open') && modalData && modalData.id === item.id && modalData.type ===
+                    type) {
+                    modalFavBtn.textContent = isNowFav ? '❤️' : '♡';
+                    modalFavBtn.classList.toggle('active', isNowFav);
+                }
+                favCount.textContent = getFavorites().length;
+                renderFavorites();
+            });
+
+            return card;
+        }
+
+        function renderHorizontalCards(containerId, items, type = null) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            container.innerHTML = '';
+            if (!items || items.length === 0) {
+                container.innerHTML =
+                    `<div class="empty-state" style="padding:20px 0;"><span class="big-icon" style="font-size:24px;">📭</span><p style="font-size:13px;">No content found</p></div>`;
+                return;
+            }
+            const fragment = document.createDocumentFragment();
+            items.forEach(item => {
+                const itemType = type || (item.title ? 'movie' : 'tv');
+                fragment.appendChild(createHorizontalCard(item, itemType));
+            });
+            container.appendChild(fragment);
+        }
+
+        // ─── Home: load trending & provider content ───
+        async function fetchHuluContent() {
+            try {
+                const [movies, tv] = await Promise.all([
+                    fetchTMDB('/discover/movie', { with_watch_providers: HULU_PROVIDER_ID, watch_region: 'US',
+                        sort_by: 'popularity.desc' }),
+                    fetchTMDB('/discover/tv', { with_watch_providers: HULU_PROVIDER_ID, watch_region: 'US',
+                        sort_by: 'popularity.desc' })
+                ]);
+                return [...(movies.results || []), ...(tv.results || [])].slice(0, 20);
+            } catch (e) {
+                console.warn('Could not fetch Hulu content', e);
+                return [];
+            }
+        }
+
+        async function fetchAppleContent() {
+            try {
+                const [movies, tv] = await Promise.all([
+                    fetchTMDB('/discover/movie', { with_watch_providers: APPLE_PROVIDER_ID, watch_region: 'US',
+                        sort_by: 'popularity.desc' }),
+                    fetchTMDB('/discover/tv', { with_watch_providers: APPLE_PROVIDER_ID, watch_region: 'US',
+                        sort_by: 'popularity.desc' })
+                ]);
+                return [...(movies.results || []), ...(tv.results || [])].slice(0, 20);
+            } catch (e) {
+                console.warn('Could not fetch Apple TV+ content', e);
+                return [];
+            }
+        }
+
         async function loadHome() {
             try {
-                const [movieData, tvData] = await Promise.all([
+                const [movieData, tvData, huluResults, appleResults] = await Promise.all([
                     fetchTMDB('/trending/movie/day', { page: 1 }),
-                    fetchTMDB('/trending/tv/day', { page: 1 })
+                    fetchTMDB('/trending/tv/day', { page: 1 }),
+                    fetchHuluContent(),
+                    fetchAppleContent()
                 ]);
 
                 homeMovies = movieData.results || [];
                 homeTv = tvData.results || [];
+                huluData = huluResults;
+                appleData = appleResults;
 
                 movieCount.textContent = homeMovies.length;
                 tvCount.textContent = homeTv.length;
 
-                renderCards(homeMovieGrid, homeMovies, 'movie');
-                renderCards(homeTvGrid, homeTv, 'tv');
+                renderHorizontalCards('homeMovieGrid', homeMovies, 'movie');
+                renderHorizontalCards('homeTvGrid', homeTv, 'tv');
+                renderHorizontalCards('huluContainer', huluData);
+                renderHorizontalCards('appleContainer', appleData);
 
                 if (homeMovies.length > 0) {
                     heroItem = homeMovies[0];
@@ -1214,6 +1559,8 @@
                     `<div class="empty-state"><span class="big-icon">⚠️</span><h3>Error</h3><p>${err.message}</p></div>`;
                 homeTvGrid.innerHTML = '';
                 setHero(null, 'movie');
+            } finally {
+                hideLoadingScreen();
             }
         }
 
@@ -1407,7 +1754,6 @@
 
         function renderSeasons(tvDetails) {
             const seasons = tvDetails.seasons || [];
-            // Filter out empty seasons or just show all
             const validSeasons = seasons.filter(s => s.episode_count > 0);
 
             if (!validSeasons.length) {
@@ -1432,7 +1778,6 @@
                 seasonSelector.appendChild(pill);
             });
 
-            // Load episodes for the first season by default
             if (validSeasons.length > 0) {
                 fetchEpisodes(tvDetails.id, validSeasons[0].season_number);
             }
@@ -1475,12 +1820,28 @@
         // ─── Modal ───
         async function openModal(item, type) {
             const id = item.id;
+
             let details = item;
-            if (!item.title && !item.name) {
+            try {
+                if (type === 'tv') {
+                    details = await fetchDetails(type, id);
+                } else {
+                    if (!item.genres || !item.runtime) {
+                        details = await fetchDetails(type, id);
+                    } else {
+                        details = item;
+                    }
+                }
+            } catch (_) {
+                details = item;
+            }
+
+            if (type === 'tv' && !details.seasons) {
                 try {
                     details = await fetchDetails(type, id);
-                } catch (_) { details = item; }
+                } catch (_) {}
             }
+
             const title = getTitle(details, type);
             const year = getYear(getDate(details, type));
             const rating = details.vote_average?.toFixed(1) || '—';
@@ -1491,16 +1852,6 @@
             let runtime = getRuntime(details, type);
             let genres = details.genres || [];
             let tagline = details.tagline || '';
-
-            if (!details.genres) {
-                try {
-                    const full = await fetchDetails(type, id);
-                    runtime = getRuntime(full, type);
-                    genres = full.genres || [];
-                    tagline = full.tagline || '';
-                    details = full;
-                } catch (_) {}
-            }
 
             modalBackdrop.style.backgroundImage = backdrop ? `url(${backdrop})` : '';
             modalTitle.textContent = title;
@@ -1519,14 +1870,12 @@
             modalFavBtn.textContent = fav ? '❤️' : '♡';
             modalFavBtn.classList.toggle('active', fav);
 
-            // Seasons & Episodes (TV only)
-            if (type === 'tv' && details.seasons) {
+            if (type === 'tv' && details.seasons && details.seasons.length > 0) {
                 renderSeasons(details);
             } else {
                 seasonEpisodesSection.style.display = 'none';
             }
 
-            // Trailers
             let videos = [];
             let trailerKey = null;
             try {
@@ -1558,6 +1907,17 @@
             document.body.style.overflow = 'hidden';
         }
 
+        // ─── API wrappers ───
+        async function fetchDetails(type, id) {
+            return await fetchTMDB(`/${type}/${id}`);
+        }
+
+        async function fetchVideos(type, id) {
+            const data = await fetchTMDB(`/${type}/${id}/videos`);
+            return data.results || [];
+        }
+
+        // ─── Close modal ───
         function closeModal() {
             modalOverlay.classList.remove('open');
             document.body.style.overflow = '';
@@ -1654,11 +2014,13 @@
             homeMovieGrid.innerHTML =
                 `<div class="empty-state"><span class="big-icon">🔑</span><h3>TMDB API Key Required</h3><p>Paste your key into the <strong>API_KEY</strong> variable in the script.</p></div>`;
             setHero(null, 'movie');
+            hideLoadingScreen(); // hide loader immediately if no key
         } else {
             loadHome();
         }
 
         console.log('🎬 CineVerse Mobile ready.');
     </script>
+
 </body>
 </html>
