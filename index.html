@@ -1023,6 +1023,24 @@
                 <h2>🍎 Apple TV+ Originals</h2>
             </div>
             <div class="horizontal-scroll" id="appleContainer"></div>
+
+            <!-- Popular Anime -->
+            <div class="section-header">
+                <h2>🇯🇵 Popular Anime</h2>
+            </div>
+            <div class="horizontal-scroll" id="animeContainer"></div>
+
+            <!-- Netflix Section -->
+            <div class="section-header">
+                <h2>📺 Netflix Originals & Popular</h2>
+            </div>
+            <div class="horizontal-scroll" id="netflixContainer"></div>
+
+            <!-- Disney+ Section -->
+            <div class="section-header">
+                <h2>🏰 Disney+ Originals & Popular</h2>
+            </div>
+            <div class="horizontal-scroll" id="disneyContainer"></div>
         </section>
 
         <!-- MOVIES TAB (header removed) -->
@@ -1135,8 +1153,8 @@
         const API_KEY = '77c1a81838fea47869506ff798f95404'; // <-- PASTE YOUR API KEY HERE
 
         // ─── EMBED URLS (replace with your free website) ───
-        const MOVIE_EMBED_URL = 'https://player.videasy.net/movie/{id}?color=b300ff';
-        const TV_EMBED_URL = 'https://www.vidking.net/embed/tv/{id}/{season}/{episode}?color=9146ff';
+        const MOVIE_EMBED_URL = 'https://embed.filmu.in/embed/movie/{id}';
+        const TV_EMBED_URL = 'https://viduki.net/3/tv/{id}/{season}/{episode}?color=6441a5';
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
         const TMDB_BASE = 'https://api.themoviedb.org/3';
@@ -1145,6 +1163,8 @@
         // Provider IDs
         const HULU_PROVIDER_ID = 15;
         const APPLE_PROVIDER_ID = 350;
+        const NETFLIX_PROVIDER_ID = 8;
+        const DISNEY_PROVIDER_ID = 337;
 
         // ─── State ───
         let currentTab = 'home';
@@ -1153,6 +1173,13 @@
         let homeMovies = [];
         let homeTv = [];
         let heroItem = null;
+
+        // Provider data
+        let huluData = [];
+        let appleData = [];
+        let animeData = [];
+        let netflixData = [];
+        let disneyData = [];
 
         // Movies tab state
         let moviesPage = 1;
@@ -1238,6 +1265,9 @@
         // Horizontal refs
         const huluContainer = $('huluContainer');
         const appleContainer = $('appleContainer');
+        const animeContainer = $('animeContainer');
+        const netflixContainer = $('netflixContainer');
+        const disneyContainer = $('disneyContainer');
 
         // ─── Loading Screen ───
         const loadingScreen = $('loadingScreen');
@@ -1335,6 +1365,9 @@
                 renderHorizontalCards('homeTvGrid', homeTv, 'tv');
                 renderHorizontalCards('huluContainer', huluData);
                 renderHorizontalCards('appleContainer', appleData);
+                renderHorizontalCards('animeContainer', animeData);
+                renderHorizontalCards('netflixContainer', netflixData);
+                renderHorizontalCards('disneyContainer', disneyData);
             } else if (currentTab === 'movies') {
                 renderCards(moviesGrid, moviesItems, 'movie');
             } else if (currentTab === 'tv') {
@@ -1414,9 +1447,6 @@
         }
 
         // ─── Render horizontal cards ───
-        let huluData = [];
-        let appleData = [];
-
         function createHorizontalCard(item, type) {
             const title = getTitle(item, type);
             const year = getYear(getDate(item, type));
@@ -1515,19 +1545,72 @@
             }
         }
 
+        // Fetches current trending/popular anime (movies + TV shows with Japanese language)
+        async function fetchAnimeContent() {
+            try {
+                const [movies, tv] = await Promise.all([
+                    fetchTMDB('/trending/movie/day', { language: 'en-US' }),
+                    fetchTMDB('/trending/tv/day', { language: 'en-US' })
+                ]);
+                const all = [...(movies.results || []), ...(tv.results || [])];
+                const anime = all.filter(item => item.original_language === 'ja');
+                return anime.slice(0, 20);
+            } catch (e) {
+                console.warn('Could not fetch Anime content', e);
+                return [];
+            }
+        }
+
+        async function fetchNetflixContent() {
+            try {
+                const [movies, tv] = await Promise.all([
+                    fetchTMDB('/discover/movie', { with_watch_providers: NETFLIX_PROVIDER_ID, watch_region: 'US',
+                        sort_by: 'popularity.desc' }),
+                    fetchTMDB('/discover/tv', { with_watch_providers: NETFLIX_PROVIDER_ID, watch_region: 'US',
+                        sort_by: 'popularity.desc' })
+                ]);
+                return [...(movies.results || []), ...(tv.results || [])].slice(0, 20);
+            } catch (e) {
+                console.warn('Could not fetch Netflix content', e);
+                return [];
+            }
+        }
+
+        async function fetchDisneyContent() {
+            try {
+                const [movies, tv] = await Promise.all([
+                    fetchTMDB('/discover/movie', { with_watch_providers: DISNEY_PROVIDER_ID, watch_region: 'US',
+                        sort_by: 'popularity.desc' }),
+                    fetchTMDB('/discover/tv', { with_watch_providers: DISNEY_PROVIDER_ID, watch_region: 'US',
+                        sort_by: 'popularity.desc' })
+                ]);
+                return [...(movies.results || []), ...(tv.results || [])].slice(0, 20);
+            } catch (e) {
+                console.warn('Could not fetch Disney+ content', e);
+                return [];
+            }
+        }
+
         async function loadHome() {
             try {
-                const [movieData, tvData, huluResults, appleResults] = await Promise.all([
-                    fetchTMDB('/trending/movie/day', { page: 1 }),
-                    fetchTMDB('/trending/tv/day', { page: 1 }),
-                    fetchHuluContent(),
-                    fetchAppleContent()
-                ]);
+                const [movieData, tvData, huluResults, appleResults, animeResults, netflixResults, disneyResults] = await Promise
+                    .all([
+                        fetchTMDB('/trending/movie/day', { page: 1 }),
+                        fetchTMDB('/trending/tv/day', { page: 1 }),
+                        fetchHuluContent(),
+                        fetchAppleContent(),
+                        fetchAnimeContent(),
+                        fetchNetflixContent(),
+                        fetchDisneyContent()
+                    ]);
 
                 homeMovies = movieData.results || [];
                 homeTv = tvData.results || [];
                 huluData = huluResults;
                 appleData = appleResults;
+                animeData = animeResults;
+                netflixData = netflixResults;
+                disneyData = disneyResults;
 
                 movieCount.textContent = homeMovies.length;
                 tvCount.textContent = homeTv.length;
@@ -1536,6 +1619,9 @@
                 renderHorizontalCards('homeTvGrid', homeTv, 'tv');
                 renderHorizontalCards('huluContainer', huluData);
                 renderHorizontalCards('appleContainer', appleData);
+                renderHorizontalCards('animeContainer', animeData);
+                renderHorizontalCards('netflixContainer', netflixData);
+                renderHorizontalCards('disneyContainer', disneyData);
 
                 if (homeMovies.length > 0) {
                     heroItem = homeMovies[0];
@@ -1949,9 +2035,8 @@
                 episodeList.innerHTML = '';
                 episodeList.appendChild(fragment);
 
-                if (episodes.length > 0 && modalData) {
-                    setVideoEmbed('tv', modalData.id, seasonNumber, episodes[0].episode_number);
-                }
+                // Removed automatic play on load - user must click an episode
+
             } catch (err) {
                 console.error(err);
                 episodeList.innerHTML =
@@ -2014,10 +2099,14 @@
 
             modalData = { id, type, details };
 
+            // Movie: auto-play, TV: wait for user selection
             if (type === 'movie') {
                 setVideoEmbed('movie', id);
                 seasonEpisodesSection.style.display = 'none';
             } else if (type === 'tv') {
+                // Clear the video player until an episode is clicked
+                videoIframe.src = '';
+                videoLabel.textContent = 'Select an episode';
                 if (details.seasons && details.seasons.length > 0) {
                     renderSeasons(details);
                 } else {
